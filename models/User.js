@@ -33,8 +33,8 @@ const UserSchema = new Schema({
   },
   admin: Boolean,
   description: { type: String, trim: true },
-  dislikes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
-  shares: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
+  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "posts" }],
+  shares: [{ type: mongoose.Schema.Types.ObjectId, ref: "posts" }],
   followers: [
     {
       user: { type: Schema.Types.ObjectId, ref: "users" },

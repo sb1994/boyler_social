@@ -10,6 +10,7 @@ dotenv.config();
 
 const loginRoute = require("./routes/loginRoutes");
 const registerRoute = require("./routes/registerRoutes");
+const usersApiRoute = require("./routes/api/users");
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use(bodyParser.json());
 //routes
 app.use("/register", registerRoute);
 app.use("/login", loginRoute);
+app.use("/users", usersApiRoute);
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
