@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const passport = require("passport");
 
+const middleware = require('./utils/authMiddleware')
 const cors = require("cors");
 
 dotenv.config();
@@ -11,6 +12,7 @@ dotenv.config();
 const loginRoute = require("./routes/loginRoutes");
 const registerRoute = require("./routes/registerRoutes");
 const usersApiRoute = require("./routes/api/users");
+const postsApiRoute = require("./routes/api/posts");
 
 const app = express();
 
@@ -24,10 +26,12 @@ require("./utils/passport")(passport);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-//routes
+//routes auth routes
 app.use("/register", registerRoute);
 app.use("/login", loginRoute);
-app.use("/users", usersApiRoute);
+//api routes
+app.use("/api/users", usersApiRoute);
+app.use("/api/posts", postsApiRoute);
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
