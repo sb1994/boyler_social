@@ -33,6 +33,7 @@
     "nodemon": "^2.0.15",
     "passport": "^0.5.2",
     "passport-jwt": "^4.0.0",
+    "react-router-dom": "^6.2.1",
     "socket.io": "^4.4.1"
   },
   "devDependencies": {

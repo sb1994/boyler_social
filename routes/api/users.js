@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require("../../models/User");
 const { requireLogin } = require("../../utils/authMiddleware");
 
-router.get("/:username",requireLogin, async (req, res, next) => {
+router.get("/:username", async (req, res, next) => {
   const username = req.params.username;
 
   const user = await User.findOne({ username: username });
