@@ -4,6 +4,9 @@ import axios from "axios";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import setUserToken from "./utils/setUserToken";
 import MainContent from "./components/MainPage/MainContent/MainContent";
+import Loading from "./components/Loading";
+
+
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -15,10 +18,15 @@ function App() {
 
     if (token) {
       setUserToken(token);
+      setIsLoading(false)
     } else {
       console.log("user not logged in");
     }
   }, [true]);
+
+  if (isLoading) {
+    return <Loading/>
+  }
 
   return (
     <div className="App">
