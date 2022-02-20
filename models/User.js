@@ -31,7 +31,11 @@ const UserSchema = new Schema({
     default:
       "http://www.culpepperandassociates.com/wp-content/uploads/2014/08/dummy-avatar.png",
   },
-  admin: Boolean,
+  role: {
+    type: String,
+    enum: ["admin", "user"],
+    default: "user",
+  },
   description: { type: String, trim: true },
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "posts" }],
   shares: [{ type: mongoose.Schema.Types.ObjectId, ref: "posts" }],

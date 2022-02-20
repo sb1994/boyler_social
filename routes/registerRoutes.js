@@ -26,15 +26,15 @@ router.post("/", async (req, res) => {
 
   const user = await User.findOne({
     $or: [{ username: username }, { email: email }],
-  }).catch((err) => {
-    console.log(err);
-
-    // send an error
   });
 
+  // if user
+  const isFirstAccount = (await User.countDocuments({})) === 0;
+  const role = isFirstAccount ? "admin" : "user";
+
+  console.log(role);
   if (user == null) {
     // no user exists so a new user can be created
-    console.log(user);
     const data = {
       firstName,
       lastName,
@@ -42,6 +42,7 @@ router.post("/", async (req, res) => {
       email,
       password,
       fullName,
+      role,
     };
     data.password = await bcrypt.hash(password, 10);
     User.create(data).then((user) => {
