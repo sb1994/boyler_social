@@ -1,88 +1,71 @@
-import React, { Component } from 'react'
-import { loginAuth, getCurrentUser } from '../../actions/userAuthActions'
-import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
-class Login extends Component {
-  constructor(props) {
-    super(props)
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
-    this.state = {
-      email: '',
-      password: '',
+const Login = ({ setCurrentUser }) => {
+  const [email, setEmail] = useState("sean94@gmail.com");
+  const [password, setPassword] = useState("Seancal123");
+
+  const loginUser = () => {
+    console.log(email, password);
+  };
+
+  const checkLoginDetails = (e) => {
+    console.log(e);
+
+    e.preventDefault();
+
+    const errors = [];
+
+    if (email.length === 0) {
+      errors.push("Please enter a email.");
     }
-  }
-  componentDidMount() {
-    let { auth, history } = this.props
-    // console.log(isAuthenticated)
-  }
-  handleInputChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value })
-  }
 
-  handleSubmit = () => {
-    let { email, password } = this.state
-    if (email === '' || password === '') {
-      alert('Both Inputs Are Required')
+    if (password.length === 0) {
+      errors.push("Please enter a password.");
+    }
+    if (errors.length === 0) {
+      // information passes client side validation, send to server
+
+      // alert('log in info has been validated and is being sent to server');
+      loginUser();
     } else {
-      this.props.loginAuth(email, password)
+      // set and display errors
+      // setValidationErrors(errors);
+      console.log(errors);
     }
-  }
-  componentWillReceiveProps(nextProps) {
-    // console.log(nextProps.auth.isAuthenticated)
-    if (nextProps.auth.isAuthenticated) {
-      // this.props.getCurrentUser(this.props.auth.user.id)
-      console.log(this.props.auth)
+  };
 
-      // this.props.getCurrentUser(nextProps.auth.user._id)
-      this.props.history.push(`/profile/${nextProps.auth.user._id}/posts`)
-    }
-  }
+  return (
+    <div>
+      <h1>Login to Boyler Social</h1>
 
-  render() {
-    let { email, password } = this.state
-    return (
-      <div className='container'>
-        <div className='col-12 col-md-8'>
-          <h1 className='text-center'>Login</h1>
-          <div className='form-group'>
-            <label htmlFor='emailInput'>Email address</label>
-            <input
-              type='email'
-              className='form-control'
-              id='emailInput'
-              placeholder='Enter email'
-              onChange={this.handleInputChange}
-              name='email'
-              autoFocus
-              value={email}
-            />
-          </div>
-          <div className='form-group'>
-            <label htmlFor='passwordInput'>Password</label>
-            <input
-              type='text'
-              className='form-control'
-              id='passwordInput'
-              placeholder='Password'
-              onChange={this.handleInputChange}
-              name='password'
-              value={password}
-            />
-          </div>
-          <button className='btn btn-primary' onClick={this.handleSubmit}>
-            Login
-          </button>
-          <Link to='/register'>Register</Link>
-        </div>
-      </div>
-    )
-  }
-}
-const mapStateToProps = (state) => {
-  return {
-    loading: state.loading,
-    error: state.error,
-    auth: state.auth,
-  }
-}
-export default connect(mapStateToProps, { loginAuth, getCurrentUser })(Login)
+      <Link to="/register"> Register for Boyler Social</Link>
+
+      <input
+        className=""
+        type="text"
+        name="email"
+        placeholder="email or email"
+        value={email}
+        autoFocus
+        onChange={(e) => setEmail(e.target.value)}
+        required
+      />
+
+      <input
+        className="input__sign-in"
+        type="password"
+        name="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+      />
+      <button className="btn btn-fill" onClick={checkLoginDetails}>
+        Log in
+      </button>
+    </div>
+  );
+};
+
+export default Login;

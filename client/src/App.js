@@ -6,10 +6,9 @@ import setUserToken from "./utils/setUserToken";
 import MainContent from "./components/MainPage/MainContent/MainContent";
 import Loading from "./components/Loading";
 
-
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const working = true;
   useEffect(() => {
@@ -18,20 +17,23 @@ function App() {
 
     if (token) {
       setUserToken(token);
-      setIsLoading(false)
+      setIsLoading(false);
     } else {
       console.log("user not logged in");
     }
   }, [true]);
 
   if (isLoading) {
-    return <Loading/>
+    return <Loading />;
   }
 
   return (
     <div className="App">
       <Router>
-        <MainContent></MainContent>
+        <MainContent
+          currentUser={currentUser}
+          setCurrentUser={setCurrentUser}
+        />
       </Router>
     </div>
   );
