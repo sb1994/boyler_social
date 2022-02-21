@@ -11,9 +11,10 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
 
   const working = true;
+  let token;
   useEffect(() => {
     // set the user token
-    const token = localStorage.getItem("token");
+    token = localStorage.getItem("token");
 
     if (token) {
       setUserToken(token);
@@ -21,7 +22,7 @@ function App() {
     } else {
       console.log("user not logged in");
     }
-  }, [true]);
+  }, [token]);
 
   if (isLoading) {
     return <Loading />;
