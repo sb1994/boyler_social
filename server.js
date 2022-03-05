@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const passport = require("passport");
 
-const middleware = require('./utils/authMiddleware')
+const middleware = require("./utils/authMiddleware");
 const cors = require("cors");
 
 dotenv.config();
@@ -27,8 +27,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 //routes auth routes
-app.use("/register", registerRoute);
-app.use("/login", loginRoute);
+app.use("/api/register", registerRoute);
+app.use("/api/login", loginRoute);
 //api routes
 app.use("/api/users", usersApiRoute);
 app.use("/api/posts", postsApiRoute);

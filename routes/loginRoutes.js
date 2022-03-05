@@ -7,7 +7,7 @@ const User = require("../models/User");
 const { body } = require("express-validator");
 router.get("/test", (req, res) => res.json({ msg: "Users Works" }));
 
-router.post("/", (req, res) => {
+router.post("/login", (req, res) => {
   body("email", "").trim().escape();
   body("password", "").escape();
 

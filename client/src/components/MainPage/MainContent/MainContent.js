@@ -1,12 +1,15 @@
 import React, { useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import GuestWelcome from "../../auth/GuestWelcome";
-import ProfilePage from '../ProfilePage'
-import SearchPage from '../SearchPage'
-import Login from '../../auth/Login'
-import Register from '../../auth/Register'
-const MainContent = ({currentUser,setCurrentUser}) => {
+import ProfilePage from "../ProfilePage";
+import SearchPage from "../SearchPage";
+import Login from "../../auth/Login";
+import Register from "../../auth/Register";
+import { useSelector, useDispatch } from "react-redux";
+const MainContent = ({ currentUser, setCurrentUser }) => {
   const location = useLocation();
+
+  const user = useSelector((state) => state.auth);
   useEffect(() => {
     console.log(location);
     // con;
@@ -18,10 +21,10 @@ const MainContent = ({currentUser,setCurrentUser}) => {
     <div className="layout__main">
       <Routes>
         <Route exact path="/guest" element={<GuestWelcome />} />
-        <Route exact path="/profile/:username" element={<ProfilePage/>} />
-        <Route exact path="/search" element={<SearchPage/>} />
-        <Route exact path="/login" element={<Login/>} />
-        <Route exact path="/register" element={<Register/>} />
+        <Route exact path="/profile/:username" element={<ProfilePage />} />
+        <Route exact path="/search" element={<SearchPage />} />
+        <Route exact path="/login" element={<Login />} />
+        <Route exact path="/register" element={<Register />} />
       </Routes>
     </div>
   );
