@@ -136,29 +136,30 @@ export const setSearchedUser = (user) => {
     payload: user,
   };
 };
-export const loginAuth = (email, password) => {
-  return (dispatch) => {
-    dispatch(startAuth());
-    axios
-      .post("api/login", {
-        email: email,
-        password: password,
-      })
-      .then((result) => {
-        console.log(result.data);
-        const token = result.data.token;
-        //sets the expirey date
-        // const expire = new Date(new Date().getTime() + 10000 * 1000)
-        //stores the the token and the expireation date in the browser
-        //as a cookie
-        localStorage.setItem("token", token);
-        setUserToken(token);
-        dispatch(setLoggedUser(result.data.user));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+export const loginAuth = (email, password) => (dispatch) => {
+  dispatch(startAuth());
+
+  console.log(email, password);
+  axios
+    .post("/api/users/login", {
+      email,
+      password,
+    })
+    .then((result) => {
+      console.log(result.data);
+      console.log(result.data);
+      const token = result.data.token;
+      //sets the expirey date
+      // const expire = new Date(new Date().getTime() + 10000 * 1000)
+      //stores the the token and the expireation date in the browser
+      //as a cookie
+      localStorage.setItem("token", token);
+      setUserToken(token);
+      dispatch(setLoggedUser(result.data.user));
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 export const registerAuth = ({ password, name, email }) => {
   //alert that the register has started

@@ -1,13 +1,21 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { loginAuth } from "../../store/actions/userAuthActions";
 
 const Login = ({ setCurrentUser }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [email, setEmail] = useState("sean94@gmail.com");
   const [password, setPassword] = useState("Seancal123");
 
-  const loginUser = () => {
-    console.log(email, password);
-  };
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/home");
+    }
+  }, [isAuthenticated]);
 
   const checkLoginDetails = (e) => {
     console.log(e);
@@ -27,7 +35,7 @@ const Login = ({ setCurrentUser }) => {
       // information passes client side validation, send to server
 
       // alert('log in info has been validated and is being sent to server');
-      loginUser();
+      dispatch(loginAuth(email, password));
     } else {
       // set and display errors
       // setValidationErrors(errors);

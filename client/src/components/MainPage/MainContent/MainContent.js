@@ -1,30 +1,35 @@
 import React, { useEffect } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { useNavigate, Routes, Route, useLocation } from "react-router-dom";
 import GuestWelcome from "../../auth/GuestWelcome";
 import ProfilePage from "../ProfilePage";
+import setUserToken from "../../../utils/setUserToken";
+import HomePage from "../HomePage";
 import SearchPage from "../SearchPage";
 import Login from "../../auth/Login";
 import Register from "../../auth/Register";
 import { useSelector, useDispatch } from "react-redux";
-const MainContent = ({ currentUser, setCurrentUser }) => {
-  const location = useLocation();
+const MainContent = () => {
+  // const location = useLocation();
+  const navigate = useNavigate();
 
-  const user = useSelector((state) => state.auth);
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
+
   useEffect(() => {
-    console.log(location);
-    // con;
-    // return () => {
-    //   second;
-    // };
-  }, [location]);
+    if (isAuthenticated) {
+      console.log("User is authenticated");
+      navigate("/home");
+    } else {
+      navigate("/login");
+    }
+  }, []);
+
   return (
     <div className="layout__main">
       <Routes>
-        <Route exact path="/guest" element={<GuestWelcome />} />
-        <Route exact path="/profile/:username" element={<ProfilePage />} />
-        <Route exact path="/search" element={<SearchPage />} />
-        <Route exact path="/login" element={<Login />} />
-        <Route exact path="/register" element={<Register />} />
+        <Route path="/" element={<GuestWelcome />} />
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </div>
   );
