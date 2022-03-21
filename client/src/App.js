@@ -22,6 +22,7 @@ const App = () => {
   const dispatch = useDispatch();
 
   let token;
+  let socket
   useEffect(() => {
     // set the user token
     token = localStorage.getItem("token");
@@ -31,7 +32,26 @@ const App = () => {
       dispatch(getCurrentUser());
       // navigate("/login");
 
+      // create the socket
+      
       setIsLoading(false);
+    } else {
+      console.log("user not logged in");
+
+      // dispatch(loginAuth("sean94@gmail.com", "Seancal123"));
+      setIsLoading(false);
+    }
+  }, [token]);
+
+  useEffect(() => {
+    // set the user token
+    token = localStorage.getItem("token");
+
+    if (token) {
+      // navigate("/login");
+
+      // create the socket
+      console.log('creating a socket');
     } else {
       console.log("user not logged in");
 

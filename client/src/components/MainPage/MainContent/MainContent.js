@@ -30,6 +30,7 @@ const MainContent = () => {
         <Route path="/home" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/search" element={<SearchPage />} />
       </Routes>
     </div>
   );
