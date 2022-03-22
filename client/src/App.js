@@ -22,8 +22,8 @@ const App = () => {
   const dispatch = useDispatch();
 
   let token;
-
-  const [socket, setSocket] = useState({});
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
+  const [socket, setSocket] = useState(null);
   useEffect(() => {
     // set the user token
     token = localStorage.getItem("token");
@@ -33,11 +33,6 @@ const App = () => {
       dispatch(getCurrentUser());
       // navigate("/login");
 
-      const newSocket = io("ws://localhost:5000");
-      // create the socket
-
-      // console.log("User is authenticated");
-      setSocket(newSocket);
       // socket.on("connect", () => console.log("heoo"));
 
       setIsLoading(false);
@@ -53,18 +48,27 @@ const App = () => {
     // set the user token
 
     if (token) {
+      console.log(isAuthenticated);
+      setIsLoading(true);
       // navigate("/login");
       // create the socket
-      console.log("creating a socket");
+      const newSocket = io("ws://localhost:5000");
+      console.log(newSocket);
+      // create the socket
+
+      // console.log("User is authenticated");
+      setSocket(newSocket);
+
+      setIsLoading(false);
     } else {
       console.log("user not logged in");
 
       // dispatch(loginAuth("sean94@gmail.com", "Seancal123"));
       setIsLoading(false);
     }
-  }, [token]);
+  }, [isAuthenticated]);
 
-  if (isLoading) {
+  if (isLoading && !socket) {
     return <Loading />;
   }
 

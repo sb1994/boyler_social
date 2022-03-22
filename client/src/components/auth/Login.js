@@ -13,9 +13,10 @@ const Login = ({ setCurrentUser }) => {
 
   useEffect(() => {
     if (isAuthenticated) {
+      window.location.reload();
       navigate("/home");
     }
-  }, [isAuthenticated]);
+  }, []);
 
   const checkLoginDetails = (e) => {
     console.log(e);
