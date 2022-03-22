@@ -47,7 +47,27 @@ if (process.env.NODE_ENV === "production") {
 }
 
 const PORT = process.env.PORT || 5000;
+const http = require("http");
+const server = http.createServer(app);
+//api routes
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+//soket connection
 
+const { Server } = require("socket.io");
+
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+  },
+});
+
+io.on("connection", (socket) => {
+  io.emit("connected");
+
+  socket.on("disconnect", () => {
+    console.log("someone disconnected");
+    io.emit("disconnected");
+  });
+});
 module.exports = app;

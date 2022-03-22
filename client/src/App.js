@@ -1,5 +1,5 @@
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import {
   Route,
@@ -7,22 +7,23 @@ import {
   Switch,
   BrowserRouter,
 } from "react-router-dom";
+
+import { io } from "socket.io-client";
 import setUserToken from "./utils/setUserToken";
 import MainContent from "./components/MainPage/MainContent/MainContent";
 import Loading from "./components/Loading";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getCurrentUser, loginAuth } from "./store/actions/userAuthActions";
-import HomePage from "./components/MainPage/HomePage";
-import Login from "./components/auth/Login";
-import Register from "./components/auth/Register";
+
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const dispatch = useDispatch();
 
   let token;
-  let socket
+
+  const [socket, setSocket] = useState({});
   useEffect(() => {
     // set the user token
     token = localStorage.getItem("token");
@@ -32,8 +33,13 @@ const App = () => {
       dispatch(getCurrentUser());
       // navigate("/login");
 
+      const newSocket = io("ws://localhost:5000");
       // create the socket
-      
+
+      // console.log("User is authenticated");
+      setSocket(newSocket);
+      // socket.on("connect", () => console.log("heoo"));
+
       setIsLoading(false);
     } else {
       console.log("user not logged in");
@@ -45,13 +51,11 @@ const App = () => {
 
   useEffect(() => {
     // set the user token
-    token = localStorage.getItem("token");
 
     if (token) {
       // navigate("/login");
-
       // create the socket
-      console.log('creating a socket');
+      console.log("creating a socket");
     } else {
       console.log("user not logged in");
 
@@ -67,7 +71,7 @@ const App = () => {
   return (
     <Router>
       <div className="App">
-        <MainContent />
+        <MainContent socket={socket} />
       </div>
     </Router>
   );
