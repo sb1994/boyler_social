@@ -4,6 +4,7 @@ import {
   GET_USERS,
   SUCCESS_FOLLOW,
   SUCCESS_FOLLOW_REMOVE,
+  SET_CONNECTED_USERS,
 } from "../actions/action_types";
 import isEmpty from "../validation/isEmpty";
 
@@ -16,10 +17,16 @@ const initialState = {
   user: {},
   searchedUser: {},
   users: [],
+  connectedUsers: [],
 };
 
 const auth = (state = initialState, action) => {
   switch (action.type) {
+    case SET_CONNECTED_USERS:
+      return {
+        ...state,
+        connectedUsers: action.payload,
+      };
     case SET_LOGGED_USER:
       return {
         ...state,

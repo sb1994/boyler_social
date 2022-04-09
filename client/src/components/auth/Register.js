@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { registerAuth } from "../../store/actions/userAuthActions";
 
 const Register = ({ setCurrentUser }) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const { user, isAuthenticated } = useSelector((state) => state.auth);
   useEffect(() => {
     if (isAuthenticated) {
       console.log("User is authenticated");
-      navigate("/home");
+      // navigate("/home");
     } else {
-      navigate("/login");
+      // navigate("/login");
     }
   }, []);
   return (

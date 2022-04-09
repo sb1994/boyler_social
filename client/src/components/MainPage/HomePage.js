@@ -1,22 +1,42 @@
+import { connect } from "mongoose";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
+import { Link, useHistory } from "react-router-dom";
+import { io } from "socket.io-client";
 
 const HomePage = ({ socket }) => {
-  const { user, isAuthenticated } = useSelector((state) => state.auth);
+  let history = useHistory();
+
+  const { user, isAuthenticated, connectedUsers } = useSelector(
+    (state) => state.auth
+  );
   useEffect(() => {
-    if (isAuthenticated && socket) {
-      console.log("I am connected");
-      socket.on("connected", () => console.log("User hased logged in"));
-      socket.on("disconnected", () => console.log("User hased logged out"));
+    if (!isAuthenticated) {
+      // window.location.reload();
+      history.push("/login");
     } else {
-      console.log("no socket");
+      // console.log(socket);
     }
-    // return () => {
-    //   second;
-    // };
   }, [isAuthenticated]);
 
-  return <div>HomePage</div>;
+  useEffect(() => {
+    // socket.current.on("connect", () => console.log("heelo"));
+
+    if (socket) {
+      //
+      console.log(socket);
+    }
+  }, [user]);
+
+  return (
+    <div>
+      <h1>HomePage</h1>
+      <Link to="/search">Search</Link>
+      {connectedUsers.map((user) => (
+        <p key={user.socketId}>{user.socketId}</p>
+      ))}
+    </div>
+  );
 };
 
 export default HomePage;

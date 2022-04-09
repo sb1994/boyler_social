@@ -3,9 +3,10 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const passport = require("passport");
-
+const jwt = require("jsonwebtoken");
 const middleware = require("./utils/authMiddleware");
 const cors = require("cors");
+const User = require("./models/User");
 
 dotenv.config();
 
@@ -55,6 +56,8 @@ server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 //soket connection
 
 const { Server } = require("socket.io");
+const { disconnect } = require("process");
+const req = require("express/lib/request");
 
 const io = new Server(server, {
   cors: {
@@ -62,12 +65,49 @@ const io = new Server(server, {
   },
 });
 
-io.on("connection", (socket) => {
-  io.emit("connected");
+let users = [];
+let usersSock = {};
+io.use(async (socket, next) => {
+  try {
+    const token = socket.handshake.query.token;
+    // console.log(`user: ${user}`);
+    const payload = await jwt.verify(token, process.env.SECRET);
+    // console.log(payload);
+    socket.userId = payload._id;
+    next();
+  } catch (err) {}
+});
+
+// utility functions
+
+const addUser = (userId, socketId, user) => {
+  console.log(userId, socketId, user);
+  !users.some((user) => user.userId === userId) &&
+    users.push({ userId, socketId, user: user });
+};
+
+const removeUser = (socketId) => {
+  users = users.filter((user) => user.socketId !== socketId);
+};
+
+io.on("connection", async (socket) => {
+  // console.log(socket.handshake.query);
+  let user = await User.findById(socket.userId).select("-password");
+
+  addUser(socket.userId, socket.id, user);
+  let total = io.engine.clientsCount;
+
+  // console.log(users);
+  // console.log(`${total} active users`);
+  // console.log(`${socket.userId} connected on socketID ${socket.id}`);
+  io.emit("connected", users);
 
   socket.on("disconnect", () => {
-    console.log("someone disconnected");
-    io.emit("disconnected");
+    let total = io.engine.clientsCount;
+    // console.log(total);
+    removeUser(socket.id);
+    console.log(`${socket.userId}  disconnected with socketID ${socket.id}`);
+    io.emit("disconnected", users);
   });
 });
 module.exports = app;

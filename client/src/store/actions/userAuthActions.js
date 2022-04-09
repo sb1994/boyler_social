@@ -129,6 +129,13 @@ export const getSearchedUser = (id) => {
       });
   };
 };
+export const setConnectedUsers = (connectedUsers) => {
+  console.log(connectedUsers);
+  return {
+    type: types.SET_CONNECTED_USERS,
+    payload: connectedUsers,
+  };
+};
 
 export const setSearchedUser = (user) => {
   return {
@@ -136,6 +143,7 @@ export const setSearchedUser = (user) => {
     payload: user,
   };
 };
+
 export const loginAuth = (email, password) => (dispatch) => {
   dispatch(startAuth());
 
@@ -146,8 +154,6 @@ export const loginAuth = (email, password) => (dispatch) => {
       password,
     })
     .then((result) => {
-      console.log(result.data);
-      console.log(result.data);
       const token = result.data.token;
       //sets the expirey date
       // const expire = new Date(new Date().getTime() + 10000 * 1000)

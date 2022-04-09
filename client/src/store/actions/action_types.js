@@ -15,7 +15,7 @@ export const PROFILE_NOT_FOUND = "PROFILE_NOT_FOUND";
 export const CLEAR_CURRENT_PROFILE = "CLEAR_CURRENT_PROFILE";
 export const GET_PROFILES = "GET_PROFILES";
 
-export const SET_SOCKET = "SET_SOCKET";
+export const SET_CONNECTED_USERS = "SET_CONNECTED_USERS";
 // Follow actions
 export const ADD_FOLLOW = "ADD_FRIEND";
 export const ADDING_FOLLOW = "ADDING_FOLLOW";
