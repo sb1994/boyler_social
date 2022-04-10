@@ -64,7 +64,6 @@ const App = () => {
     // console.log(token);
     // console.log("hello");
     if (user && socket) {
-      console.log("I can get the cactive users");
       socket.on("connected", (data) => {
         console.log(data);
         dispatch(setConnectedUsers(data));

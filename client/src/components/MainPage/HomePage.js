@@ -10,21 +10,27 @@ const HomePage = ({ socket }) => {
   const { user, isAuthenticated, connectedUsers } = useSelector(
     (state) => state.auth
   );
+  const getDataFromSelectedUser = (socketId, userId) => {
+    // let { userId } = user;
+    socket.emit("userData", { socketId, userId });
+
+    // console.log(user);
+    // console.log(socketId, userId,user.user);
+  };
   useEffect(() => {
     if (!isAuthenticated) {
       // window.location.reload();
       history.push("/login");
-    } else {
-      // console.log(socket);
     }
   }, [isAuthenticated]);
 
   useEffect(() => {
-    // socket.current.on("connect", () => console.log("heelo"));
-
     if (socket) {
       //
-      console.log(socket);
+      // console.log(socket);
+      socket.on("sendHello", (data) => {
+        console.log(data);
+      });
     }
   }, [user]);
 
@@ -32,9 +38,16 @@ const HomePage = ({ socket }) => {
     <div>
       <h1>HomePage</h1>
       <Link to="/search">Search</Link>
-      {connectedUsers.map((user) => (
-        <p key={user.socketId}>{user.socketId}</p>
-      ))}
+      {connectedUsers.map((x) =>
+        x.userId === user._id ? null : (
+          <p
+            onClick={() => getDataFromSelectedUser(x.socketId, x.userId)}
+            key={x.socketId}
+          >
+            {x.socketId}
+          </p>
+        )
+      )}
     </div>
   );
 };

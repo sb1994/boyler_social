@@ -16,8 +16,7 @@ const MainContent = ({ socket }) => {
   // const [socket, setSocket] = useState({});
 
   const { user, isAuthenticated } = useSelector((state) => state.auth);
-
-  const socketRef = useRef();
+  W;
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/home");

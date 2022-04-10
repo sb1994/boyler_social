@@ -53,8 +53,6 @@ const server = http.createServer(app);
 //api routes
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
-//soket connection
-
 const { Server } = require("socket.io");
 const { disconnect } = require("process");
 const req = require("express/lib/request");
@@ -108,6 +106,26 @@ io.on("connection", async (socket) => {
     removeUser(socket.id);
     console.log(`${socket.userId}  disconnected with socketID ${socket.id}`);
     io.emit("disconnected", users);
+  });
+  socket.on("disconnect", () => {
+    let total = io.engine.clientsCount;
+    // console.log(total);
+    removeUser(socket.id);
+    console.log(`${socket.userId}  disconnected with socketID ${socket.id}`);
+    io.emit("disconnected", users);
+  });
+  socket.on("forcedDisconnect", () => {
+    let total = io.engine.clientsCount;
+    // console.log(total);
+    removeUser(socket.id);
+
+    console.log(`${socket.userId}  disconnected with socketID ${socket.id}`);
+    socket.disconnect();
+    io.emit("disconnected", users);
+  });
+
+  socket.on("userData", (data) => {
+    io.to(data.socketId).emit("sendHello", `Hi ${data.userId}`);
   });
 });
 module.exports = app;
