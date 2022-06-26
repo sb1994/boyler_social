@@ -94,6 +94,7 @@ io.on("connection", async (socket) => {
 
   addUser(socket.userId, socket.id, user);
   let total = io.engine.clientsCount;
+  console.log(total);
 
   // console.log(users);
   // console.log(`${total} active users`);
@@ -102,7 +103,7 @@ io.on("connection", async (socket) => {
 
   socket.on("disconnect", () => {
     let total = io.engine.clientsCount;
-    // console.log(total);
+    console.log(total);
     removeUser(socket.id);
     console.log(`${socket.userId}  disconnected with socketID ${socket.id}`);
     io.emit("disconnected", users);

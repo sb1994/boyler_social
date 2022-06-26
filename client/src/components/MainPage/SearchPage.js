@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 const SearchPage = ({ socket }) => {
   let history = useHistory();
@@ -28,6 +28,9 @@ const SearchPage = ({ socket }) => {
       {connectedUsers.map((user) => (
         <p>{user.socketId}</p>
       ))}
+      <h1>
+        <Link to="/home">Home</Link>
+      </h1>
     </div>
   );
 };
