@@ -15,6 +15,8 @@ const registerRoute = require("./routes/registerRoutes");
 const usersApiRoute = require("./routes/api/users");
 const postsApiRoute = require("./routes/api/posts");
 
+const conversationsApiRoute = require("./routes/api/conversations");
+
 const app = express();
 
 const dbConnect = require("./utils/dbConnect");
@@ -34,6 +36,7 @@ app.use("/api/login", loginRoute);
 app.use("/api/users", usersApiRoute);
 app.use("/api/posts", postsApiRoute);
 
+app.use("/api/conversations", conversationsApiRoute);
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   next();
@@ -91,14 +94,12 @@ const removeUser = (socketId) => {
 io.on("connection", async (socket) => {
   // console.log(socket.handshake.query);
   let user = await User.findById(socket.userId).select("-password");
+  console.log(user._id);
 
   addUser(socket.userId, socket.id, user);
   let total = io.engine.clientsCount;
   console.log(total);
 
-  // console.log(users);
-  // console.log(`${total} active users`);
-  // console.log(`${socket.userId} connected on socketID ${socket.id}`);
   io.emit("connected", users);
 
   socket.on("disconnect", () => {
