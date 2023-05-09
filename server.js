@@ -10,13 +10,6 @@ const User = require("./models/User");
 
 dotenv.config();
 
-const loginRoute = require("./routes/loginRoutes");
-const registerRoute = require("./routes/registerRoutes");
-const usersApiRoute = require("./routes/api/users");
-const postsApiRoute = require("./routes/api/posts");
-
-const conversationsApiRoute = require("./routes/api/conversations");
-
 const app = express();
 
 const dbConnect = require("./utils/dbConnect");
@@ -29,14 +22,6 @@ require("./utils/passport")(passport);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-//routes auth routes
-app.use("/api/register", registerRoute);
-app.use("/api/login", loginRoute);
-//api routes
-app.use("/api/users", usersApiRoute);
-app.use("/api/posts", postsApiRoute);
-
-app.use("/api/conversations", conversationsApiRoute);
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   next();
@@ -78,6 +63,16 @@ io.use(async (socket, next) => {
     next();
   } catch (err) {}
 });
+const usersApiRoute = require("./routes/api/users")(io);
+const postsApiRoute = require("./routes/api/posts");
+
+const conversationsApiRoute = require("./routes/api/conversations");
+
+//api routes
+app.use("/api/users", usersApiRoute);
+app.use("/api/posts", postsApiRoute);
+
+app.use("/api/conversations", conversationsApiRoute);
 
 // utility functions
 
@@ -90,16 +85,33 @@ const addUser = (userId, socketId, user) => {
 const removeUser = (socketId) => {
   users = users.filter((user) => user.socketId !== socketId);
 };
+const getConnectedUser = (socketId) => {
+  let user = users.filter((user) => user.socketId === socketId);
+
+  return user[0];
+};
 
 io.on("connection", async (socket) => {
   // console.log(socket.handshake.query);
   let user = await User.findById(socket.userId).select("-password");
-  console.log(user._id);
+  // console.log(user._id);
 
   addUser(socket.userId, socket.id, user);
   let total = io.engine.clientsCount;
   console.log(total);
 
+  socket.on("sayHello", (data) => {
+    // console.log(data);
+    let { socketId } = data;
+
+    let user = getConnectedUser(socketId);
+
+    console.log(user);
+    io.to(socketId).emit(
+      "recieveHello",
+      `hello My name is ${user.user.username}`
+    );
+  });
   io.emit("connected", users);
 
   socket.on("disconnect", () => {

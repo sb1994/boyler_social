@@ -5,6 +5,8 @@ import {
   SUCCESS_FOLLOW,
   SUCCESS_FOLLOW_REMOVE,
   SET_CONNECTED_USERS,
+  SET_SOCKET,
+  UNSET_SOCKET,
 } from "../actions/action_types";
 import isEmpty from "../validation/isEmpty";
 
@@ -18,6 +20,7 @@ const initialState = {
   searchedUser: {},
   users: [],
   connectedUsers: [],
+  socket: null,
 };
 
 const auth = (state = initialState, action) => {
@@ -52,6 +55,17 @@ const auth = (state = initialState, action) => {
       return {
         ...state,
         searchedUser: action.payload,
+      };
+    case SET_SOCKET:
+      // console.log(action.payload);
+      return {
+        ...state,
+        socket: action.payload,
+      };
+    case UNSET_SOCKET:
+      return {
+        ...state,
+        socket: null,
       };
     default:
       return state;

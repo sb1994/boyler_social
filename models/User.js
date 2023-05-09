@@ -10,17 +10,10 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
-  fullName: { type: String, required: true, trim: true },
   email: {
     type: String,
     required: true,
     lowercase: true,
-  },
-  username: {
-    type: String,
-    required: true,
-    trim: true,
-    unique: true,
   },
   password: {
     type: String,
@@ -39,16 +32,7 @@ const UserSchema = new Schema({
   description: { type: String, trim: true },
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "posts" }],
   shares: [{ type: mongoose.Schema.Types.ObjectId, ref: "posts" }],
-  followers: [
-    {
-      user: { type: Schema.Types.ObjectId, ref: "users" },
-    },
-  ],
-  following: [
-    {
-      user: { type: Schema.Types.ObjectId, ref: "users" },
-    },
-  ],
+  // buddies: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
   joined: {
     type: Date,
     default: Date.now,

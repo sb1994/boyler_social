@@ -143,6 +143,19 @@ export const setSearchedUser = (user) => {
     payload: user,
   };
 };
+export const setSocket = (socket) => (dispatch) => {
+  console.log(socket);
+
+  dispatch({
+    type: types.SET_SOCKET,
+    payload: socket,
+  });
+};
+export const unsetSocket = () => {
+  return {
+    type: types.SET_SOCKET,
+  };
+};
 
 export const loginAuth = (email, password) => (dispatch) => {
   dispatch(startAuth());

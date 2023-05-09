@@ -14,6 +14,7 @@ import {
   getCurrentUser,
   loginAuth,
   setConnectedUsers,
+  setSocket,
 } from "./store/actions/userAuthActions";
 import HomePage from "./components/MainPage/HomePage";
 import { useHistory } from "react-router-dom";
@@ -36,12 +37,9 @@ const App = () => {
     if (token) {
       setUserToken(token);
       dispatch(getCurrentUser());
-      // navigate("/login");
-      // socket.on("connect", () => console.log("heoo"));
 
       setIsLoading(false);
     } else {
-      // dispatch(loginAuth("sean94@gmail.com", "Seancal123"));
       setIsLoading(false);
     }
   }, [token]);
@@ -55,17 +53,15 @@ const App = () => {
       const newSocket = io("http://localhost:5000", {
         query: { token },
       });
-      console.log(newSocket);
       setupSocket(newSocket);
+      dispatch(setSocket(newSocket));
     }
   }, [token]);
   useEffect(() => {
-    // set the user token
-    // console.log(token);
-    // console.log("hello");
     if (user && socket) {
+      setSocket(socket);
       socket.on("connected", (data) => {
-        console.log(data);
+        // console.log(data);
         dispatch(setConnectedUsers(data));
       });
       socket.on("disconnected", (data) => {
@@ -94,16 +90,7 @@ const App = () => {
             render={() => <HomePage socket={socket} />}
             exact
           />
-          <Route
-            path="/search"
-            render={() => <SearchPage socket={socket} />}
-            exact
-          />
-          {/*<Route
-            path="/chatroom/:id"
-            render={() => <ChatroomPage socket={socket} />}
-            exact
-          />  */}
+          <Route path="/search" render={() => <SearchPage />} exact />
         </Switch>
       </Router>
     </div>

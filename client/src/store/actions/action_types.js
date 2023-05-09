@@ -5,6 +5,8 @@ export const SUCCESS_UPLOAD = "SUCCESS_UPLOAD";
 export const FAIL_AUTH = "FAIL_AUTH";
 export const LOGOUT_AUTH = "LOGOUT_AUTH";
 export const SET_LOGGED_USER = "SET_LOGGED_USER";
+export const SET_SOCKET = "SET_SOCKET";
+export const UNSET_SOCKET = "UNSET_SOCKET";
 
 export const SET_CURRENT_USER = "SET_CURRENT_USER";
 export const UPDATE_CURRENT_USER = "UPDATE_CURRENT_USER";

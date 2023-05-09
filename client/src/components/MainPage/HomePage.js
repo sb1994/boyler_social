@@ -10,9 +10,12 @@ const HomePage = ({ socket }) => {
   const { user, isAuthenticated, connectedUsers } = useSelector(
     (state) => state.auth
   );
-  const getDataFromSelectedUser = (socketId, userId) => {
-    // let { userId } = user;
-    socket.emit("userData", { socketId, userId });
+  const getDataFromSelectedUser = (socketId) => {
+    // console.log(connectedUsers);
+    let { userId } = user;
+    // console.log(socketId);
+    socket.emit("sayHello", { socketId, userId });
+    // console.log(socket);
 
     // console.log(user);
     // console.log(socketId, userId,user.user);
@@ -28,7 +31,7 @@ const HomePage = ({ socket }) => {
     if (socket) {
       //
       // console.log(socket);
-      socket.on("sendHello", (data) => {
+      socket.on("recieveHello", (data) => {
         console.log(data);
       });
     }
@@ -44,7 +47,7 @@ const HomePage = ({ socket }) => {
             onClick={() => getDataFromSelectedUser(x.socketId, x.userId)}
             key={x.socketId}
           >
-            {x.socketId}
+            {x.socketId} :{x.user.username}
           </p>
         )
       )}
