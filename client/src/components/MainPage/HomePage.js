@@ -13,8 +13,14 @@ const HomePage = ({ socket }) => {
   const getDataFromSelectedUser = (socketId) => {
     // console.log(connectedUsers);
     let { userId } = user;
-    // console.log(socketId);
-    socket.emit("sayHello", { socketId, userId });
+    console.log(socketId);
+
+    let selectedUser = connectedUsers.filter((u) => {
+      return u.socketId === socketId;
+    });
+
+    console.log(selectedUser);
+    // socket.emit("sayHello", { socketId, userId });
     // console.log(socket);
 
     // console.log(user);
@@ -42,12 +48,13 @@ const HomePage = ({ socket }) => {
       <h1>HomePage</h1>
       <Link to="/search">Search</Link>
       {connectedUsers.map((x) =>
+        // console.log(x)
         x.userId === user._id ? null : (
           <p
             onClick={() => getDataFromSelectedUser(x.socketId, x.userId)}
             key={x.socketId}
           >
-            {x.socketId} :{x.user.username}
+            {x.socketId} :{x.user.firstName}
           </p>
         )
       )}

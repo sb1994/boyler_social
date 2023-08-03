@@ -52,7 +52,6 @@ module.exports = (io) => {
 
     const user = await User.findOne({ email }).select("-password");
 
-    console.log(user);
     if (user == null) {
       // Hash the password
       bcrypt.genSalt(10, (err, salt) => {
@@ -71,6 +70,7 @@ module.exports = (io) => {
           });
           // res.json(newUser);
 
+          console.log(newUser);
           // // Save the user to the database
           newUser
             .save()
@@ -94,7 +94,7 @@ module.exports = (io) => {
       return res.send(users);
     }
   });
-  router.post("/login", (req, res) => {
+  router.post("/login", async (req, res) => {
     body("email", "").trim().escape();
     body("password", "").escape();
 
@@ -104,40 +104,40 @@ module.exports = (io) => {
 
     if (email !== "" && password !== "") {
       // // //find user by email
-      User.findOne({
+      const user = await User.findOne({
         email,
-      }).then((user) => {
-        if (!user) {
-          return res.status(404).json({ email: "User Not Found" });
+      });
+      if (!user) {
+        return res.status(404).json({ email: "User Not Found" });
+      }
+      console.log(user);
+      // //check the password
+      bcrypt.compare(password, user.password, (err, isMatch) => {
+        if (isMatch) {
+          // user matched create the payload taht will
+          // be sent in the token
+          const payload = {
+            _id: user.id,
+            name: user.name,
+            profile_pic: user.profile_pic,
+            email: user.email,
+          };
+          jwt.sign(
+            payload,
+            process.env.SECRET,
+            { expiresIn: 3600 * 1000 * 1000 * 1000 },
+            (err, token) => {
+              res.json({
+                success: true,
+                token: `${token}`,
+                user,
+              });
+            }
+          );
+          // io.
+        } else {
+          return res.status(200).json({ msg: "password failed" });
         }
-        // //check the password
-        bcrypt.compare(password, user.password, (err, isMatch) => {
-          if (isMatch) {
-            // user matched create the payload taht will
-            // be sent in the token
-            const payload = {
-              _id: user.id,
-              name: user.name,
-              profile_pic: user.profile_pic,
-              email: user.email,
-            };
-            jwt.sign(
-              payload,
-              process.env.SECRET,
-              { expiresIn: 3600 * 1000 * 1000 * 1000 },
-              (err, token) => {
-                res.json({
-                  success: true,
-                  token: `${token}`,
-                  user,
-                });
-              }
-            );
-            // io.
-          } else {
-            return res.status(200).json({ msg: "password failed" });
-          }
-        });
       });
     } else {
       console.log("please enter an email and password");

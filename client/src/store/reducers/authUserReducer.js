@@ -10,7 +10,7 @@ import {
 } from "../actions/action_types";
 import isEmpty from "../validation/isEmpty";
 
-const initialState = {
+const userState = {
   token: null,
   userId: null,
   error: null,
@@ -20,10 +20,10 @@ const initialState = {
   searchedUser: {},
   users: [],
   connectedUsers: [],
-  socket: null,
+  // socket: null,
 };
 
-const auth = (state = initialState, action) => {
+const auth = (state = userState, action) => {
   switch (action.type) {
     case SET_CONNECTED_USERS:
       return {
@@ -56,17 +56,17 @@ const auth = (state = initialState, action) => {
         ...state,
         searchedUser: action.payload,
       };
-    case SET_SOCKET:
-      // console.log(action.payload);
-      return {
-        ...state,
-        socket: action.payload,
-      };
-    case UNSET_SOCKET:
-      return {
-        ...state,
-        socket: null,
-      };
+    // case SET_SOCKET:
+    //   // console.log(action.payload);
+    //   return {
+    //     ...state,
+    //     socket: action.payload,
+    //   };
+    // case UNSET_SOCKET:
+    //   return {
+    //     ...state,
+    //     socket: null,
+    //   };
     default:
       return state;
   }
